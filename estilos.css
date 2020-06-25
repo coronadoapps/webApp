@@ -1,0 +1,37 @@
+*{
+	border: 0px solid;
+}
+
+input[type=text]{
+	border: 2px solid #0F0326;
+}
+
+input[type=password]{
+	border: 2px solid #0F0326;
+}
+
+input[type=date]{
+	border: 2px solid #0F0326;
+}
+
+input[type=email]{
+	border: 2px solid #0F0326;
+}
+
+p #advertencias{
+	
+}
+
+.error {
+  border: 2px solid red;
+}
+
+.sidebar{
+  margin: 0;
+  padding: 0;
+  width: 200px;
+  background-color: #f1f1f1;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}

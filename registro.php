@@ -13,8 +13,7 @@
 	$result = mysqli_query($conex,$query);
 
 	if(mysqli_num_rows($result) > 0){
-		header("Location: index.html");
-		echo "<script>alert('Usuario ya registrado')</script>;";
+		header("Location: crearcuenta.php");
 	}else{
 		if(isset($_POST['registrar'])){
 
@@ -23,11 +22,10 @@
 			$resultado = mysqli_query($conex, $consulta);
 
 			if($resultado){
-				echo "<script>alert('Usuario ha sido registrado correctamente.')</script>;";
+				header("Location: home.php");
 				}else{
-				echo "Error al crear usuario";
+				echo "<script>console.log('Error al crear usuario.')</script>;";
 				}
 		}
 	}
-
 ?>

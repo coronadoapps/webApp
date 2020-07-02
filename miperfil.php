@@ -1,10 +1,24 @@
 <?php 
   //home page
+  include("conex_bd.php");
   session_start();
 
   if(!isset($_SESSION['usuario'])){
     header("Location: erro404.php");
-  }  
+  }  else{
+    $consulta = "SELECT * FROM usuarios WHERE usuario = '".$_SESSION['usuario']."' ";
+    $resultado = mysqli_query($conex,$consulta);
+
+    if($resultado){
+      while ($row = $resultado->fetch_array()) {
+        $nombre = $row['nombre'];
+        $apellido = $row['apellido'];
+        $cumpleanos = $row['cumpleanos'];
+        $fecha_registro = $row['fecha_registro'];
+      }
+    }
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -113,8 +127,8 @@
         color: #;
       }
 
-      .container2{
-        border: 1px; solid;
+      .card{
+        border: 1px solid;
       }
     </style>
 
@@ -169,12 +183,16 @@
 
     <div class="container">
       <div class="row">
-        <div class="col text-center">
-          <h1>¡BIENVENIDO!</h1>
-          <p>Usted ha ingresado como <u><?php echo $_SESSION['usuario'] ?></u></p>
+        <div class="card border-dark text-center">
+          <div class="card-header">Mi perfil</div>
+          <div class="card-body text-dark">
+            <h5 class="card-title">@<u><?php echo $_SESSION['usuario'] ?></u></h5>
+            <p class="card-text"><?php echo $nombre," ",$apellido; ?></p>
+            <p class="card-text"><i class="fas fa-envelope"></i> <?php echo $_SESSION['email'] ?></p>
+            <p class="card-text"><i class="fas fa-birthday-cake"></i> <?php echo $cumpleanos; ?> || <i class="far fa-calendar-check"></i> <?php echo $fecha_registro; ?></p>
+          </div>
         </div>
-                     
-      </div>
+      </div>  
     </div>
 
 

@@ -7,13 +7,14 @@
 	$contrasena = $_POST['contrasena'];
 	$cumpleanos = $_POST['cumpleanos'];
 	$email = $_POST['email'];
-	$fecha_registro = date("d/m/y");
+	$fecha_registro = date("y/m/d");
 
-	$query = "SELECT * FROM usuarios WHERE usuario = '$usuario'";
+	$query = "SELECT * FROM usuarios WHERE usuario = '$usuario' OR email = '$email'";
 	$result = mysqli_query($conex,$query);
 
 	if(mysqli_num_rows($result) > 0){
 		header("Location: crearcuenta.php");
+		echo "usuario o email ya registrado.";
 	}else{
 		if(isset($_POST['registrar'])){
 
@@ -22,9 +23,11 @@
 			$resultado = mysqli_query($conex, $consulta);
 
 			if($resultado){
+				session_start();
+				$_SESSION['usuario'] = $usuario;
 				header("Location: home.php");
 				}else{
-				echo "<script>console.log('Error al crear usuario.')</script>;";
+					echo "error conectar database.";
 				}
 		}
 	}

@@ -41,103 +41,13 @@
     <!-- Mis estilos -->
 
     <link href="https://fonts.googleapis.com/css2?family=Play:wght@700&display=swap" rel="stylesheet">
-
-    <style type="text/css">
-      *{
-        border: 0px solid;
-        font-family: 'Play', sans-serif;
-      }
-
-      body {
-        background-color: #f5f5f5;
-      }
-
-      .myNav{
-        background-color: #094293;
-        margin-bottom: 20px;
-        color: #f5f5f5;
-      }
-
-      .navbar a{
-        padding: 5px;
-        margin-left: 2px;
-      }
-
-      .myfooter{
-        background-color: #094293;
-        color: #f5f5f5;
-        text-align: center;
-        padding: 30px;
-        margin-top: 30px;
-      }
-
-      .myfooter img{
-        width: 35px;
-        padding: 2px;
-        margin-bottom: 5px;
-        display: inline-block;
-      }
-
-      .myfooter a{
-        text-decoration: none;
-        color: #bdfbdf;
-        font-style: italic;
-      }
-
-      .myfooter a:hover{
-        color: #f6bd6c;
-      }
-
-      .contacto a{
-        padding: 10px;
-        margin: 5px;
-      }
-
-      .contacto a:hover, .myNav a:hover{
-        border-radius: 10%;
-        background-color: #bdfbdf3f;
-        transition: 0.3s;
-      }
-
-      #formularioregistro, #formulariologin {
-        border: 1px solid;
-      }
-
-      #formularioregistro .form-control, #formulariologin .form-control {
-        border: 1px solid;
-      }
-
-      #formularioregistro button:hover:not([disabled]), #formulariologin button:hover:not([disabled]){
-        background-color: #;
-        color: #;
-        transition: 0.2s;
-      }
-
-      #formularioregistro button, #formulariologin button{
-        background-color: #;
-        color: #;
-        opacity: 0.9;
-      }
-
-      .error {
-        outline: solid #ff0000; 
-      }
-
-      #formularioregistro a, #formulariologin a{
-        color: #;
-      }
-
-      .card{
-        border: 1px solid;
-      }
-    </style>
-
+    <link rel="stylesheet" type="text/css" href="css/estilos.css">
     <title>web.com</title>
   </head>
 
   <body>
 
-    <div class="myNav container-fluid"> <!-- header -->
+    <div class="myNav container-fluid bg-dark"> <!-- header -->
       <nav class="navbar navbar-expand-lg navbar-dark">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -150,9 +60,6 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <a class="nav-link" href="#">Link 1</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link 2</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Acerca de</a>
@@ -179,60 +86,135 @@
       </nav>
     </div>     <!-- header NAV BAR--><!-- navbar -->
 
-    <?php include("modals.php"); ?> <!-- MODALS DE LOGIN -->
-
-    <div class="container">
+    <div class="container w-100">
       <div class="row">
-        <div class="card border-dark text-center">
-          <div class="card-header">Mi perfil</div>
-          <div class="card-body text-dark">
-            <h5 class="card-title">@<u><?php echo $_SESSION['usuario'] ?></u></h5>
-            <p class="card-text"><?php echo $nombre," ",$apellido; ?></p>
-            <p class="card-text"><i class="fas fa-envelope"></i> <?php echo $_SESSION['email'] ?></p>
-            <p class="card-text"><i class="fas fa-birthday-cake"></i> <?php echo $cumpleanos; ?> || <i class="far fa-calendar-check"></i> <?php echo $fecha_registro; ?></p>
-          </div>
+        
+     
+
+      <div class="col-8">
+                
+        <?php 
+          $query = "SELECT * FROM publicaciones WHERE autor = '".$_SESSION['usuario']."' ORDER By id DESC";
+          $resultado = mysqli_query($conex, $query);
+
+          if(!$resultado){
+            die('Query Error' . mysqli_error($conex));
+          } else{
+              while($row = mysqli_fetch_array($resultado)){
+
+                $queryB = "SELECT * FROM interacciones WHERE usuario = '".$_SESSION['usuario']."' AND publicacion = '".$row['id']."' ";
+                $resultadoB = mysqli_query($conex, $queryB);
+                $rowB = mysqli_fetch_array($resultadoB, MYSQLI_ASSOC);
+
+                $fecha = $row['date'];
+        ?>
+
+              <div id="card"  class="card text-white bg-dark mt-3">
+                <div class="card-header">
+                  <small>Publicado por <a href="#">@<?php echo($row['autor']);  ?></a></small>
+                  <a href="#"><?php echo(time_elapsed_string($fecha));  ?></a>
+                </div>
+                <div class="card-body"> 
+                  <h5 class="card-title"><?php echo($row['titulo']); ?></h5>
+                  <p class="card-text text-justify"><?php echo($row['descripcion']);?></p>
+                  <img src="<?php echo($row['multimedia']) ?>" class="rounded mx-auto d-block w-100">
+                </div>
+                <div class="card-footer">
+
+              <?php 
+                if(!isset($rowB['reaccion'])){
+              ?>
+                  <button id="<?php echo($row['id']); ?>" class="btn btn-dark up" style="background-color: none;"><i class="fas fa-arrow-alt-circle-up"></i></button>
+                  <?php echo($row['up'] - $row['down']);?>
+                  <button id="<?php echo($row['id']); ?>" class="btn btn-dark down" style="background-color: none;"><i class="fas fa-arrow-alt-circle-down"></i></button>
+
+              <?php } else if($rowB['reaccion'] == 0){ ?>
+
+                  <button id="<?php echo($row['id']); ?>" class="btn btn-dark up" style="background-color: none;"><i class="fas fa-arrow-alt-circle-up"></i></button>
+                  <?php echo($row['up'] - $row['down']);?>
+                  <button id="<?php echo($row['id']); ?>" class="btn btn-dark down" style="background-color: red;"><i class="fas fa-arrow-alt-circle-down"></i></button>
+
+              <?php } else if($rowB['reaccion'] == 1){ ?>    
+
+                  <button id="<?php echo($row['id']); ?>" class="btn btn-dark up" style="background-color: green;"><i class="fas fa-arrow-alt-circle-up"></i></button>
+                  <?php echo($row['up'] - $row['down']);?>
+                  <button id="<?php echo($row['id']); ?>" class="btn btn-dark down" style="background-color: none;"><i class="fas fa-arrow-alt-circle-down"></i></button>
+
+              <?php } ?>
+                  
+                  <button id="<?php echo($row['id']); ?>" class="btn btn-dark btn_comentarios"><i class="far fa-comments"></i> <?php echo($row['comentarios']);?> comentarios</button>
+                  <button class="btn btn-dark"><i class="fas fa-share-square"></i> compartir</button>
+                 <button class="btn btn-dark"><i class="fas fa-save"></i> guardar</button>
+                </div>
+              </div> 
+        <?php } //end of while
+            } //end of else?> 
+      </div>
+
+      <div class="col-4">
+        <div class="card text-white bg-dark text-center">
+        <div class="card-header">Mi perfil</div>
+        <div class="card-body">
+          <h5 class="card-title">@<u><?php echo $_SESSION['usuario'] ?></u></h5>
+          <p class="card-text"><?php echo $nombre," ",$apellido; ?></p>
+          <p class="card-text"><i class="fas fa-envelope"></i> <?php echo $_SESSION['email'] ?></p>
+          <p class="card-text"><i class="fas fa-birthday-cake"></i> <?php echo $cumpleanos; ?> || <i class="far fa-calendar-check"></i> <?php echo $fecha_registro; ?></p>
         </div>
-      </div>  
+        </div>
+      </div>
+      
+         
+ </div>
     </div>
-
-
-    <div class="myfooter container-fluid"> <!-- footer -->
-        <div class="row">
-          <div class="contacto col">
-            <a href="#">
-              <img src="img/twitter.png" class="inline-block" alt="" loading="lazy">
-            </a>
-            <a href="#">
-              <img src="img/reddit.png" class="inline-block" alt="" loading="lazy">
-            </a>
-            <a href="#">
-              <img src="img/linkedin.png" class="inline-block" alt="" loading="lazy">
-            </a> 
-            <a href="#">
-              <img src="img/github.png" class="inline-block" alt="" loading="lazy">
-            </a>           
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">            
-            Iconos diseñados por <a href="https://www.flaticon.es/autores/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.es/" title="Flaticon"> www.flaticon.es</a>
-            <p>Copyright © 2020 Bootstrap 4</p> 
-          </div>
-        </div>  
-    </div>    <!-- footer -->
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>   
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>    
 
     <script type="text/javascript">
-
-
-
-
-
+      $(function(){
+          $.ajax({
+              url: 'peticion.php',
+              type: 'POST',
+              data: {},
+              success: function(response) {
+                let rows = JSON.parse(response);
+                //console.log(rows);
+              }
+            })  
+      });
     </script>
   </body>
 </html>
+
+<?php 
+  function time_elapsed_string($datetime, $full = false) {
+    $now = new DateTime;
+    $ago = new DateTime($datetime,new DateTimeZone('America/Bogota'));
+    $diff = $now->diff($ago);
+
+    $diff->w = floor($diff->d / 7);
+    $diff->d -= $diff->w * 7;
+
+    $string = array(
+        'y' => 'year',
+        'm' => 'month',
+        'w' => 'week',
+        'd' => 'day',
+        'h' => 'hour',
+        'i' => 'minute',
+        's' => 'second',
+    );
+    foreach ($string as $k => &$v) {
+        if ($diff->$k) {
+            $v = $diff->$k . ' ' . $v . ($diff->$k > 1 ? 's' : '');
+        } else {
+            unset($string[$k]);
+        }
+    }
+
+    if (!$full) $string = array_slice($string, 0, 1);
+    return $string ? implode(', ', $string) . ' ago' : 'just now';
+  }
+ ?>

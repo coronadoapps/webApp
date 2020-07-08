@@ -5,6 +5,8 @@
 	$usuario = $_POST['usuario'];
 	$contrasena = $_POST['contrasena'];
 
+	if(!$usuario){echo "oe";}
+
 	$query = "SELECT * FROM usuarios WHERE (usuario = '$usuario' OR email = '$usuario') AND contrasena = '$contrasena'";
 
 	$result = mysqli_query($conex,$query);

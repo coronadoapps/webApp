@@ -1,32 +1,71 @@
 $(document).ready(function() {
-  let flag = 0;
-  //$("#formularioregistro #registrar").attr("disabled","disabled");
+  $("#registrar").click(function(){
+    if(!$("#usuario").val()){
+      alertify.error("Debes completar este campo",3);
+    }
 
-  $("#usuario").blur(function() {
-    validarusuario();
+    if(!$("#contrasena").val()){
+      alertify.error("Debes completar este campo",3);
+    }
   });
 
-  $("#nombre, #apellido").blur(function() {
-    validarnombres();
-  });
 
-  $("#contrasena").blur(function() {
-    validarcontrasena();
-  });
 
-  $("#contrasena2").blur(function() {
-    validarcontrasena2();
-  });
 
-  $("#cumpleanos").blur(function() {
-    validarcumpleanos();
-  });
 
-  $("#email").blur(function() {
-    validaremail();
-  });
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // $("#usuario").blur(function() {
+  //   validarusuario();
+  // });
+
+  // $("#nombre, #apellido").blur(function() {
+  //   validarnombres();
+  // });
+
+  // $("#contrasena").blur(function() {
+  //   validarcontrasena();
+  // });
+
+  // $("#contrasena2").blur(function() {
+  //   validarcontrasena2();
+  // });
+
+  // $("#cumpleanos").blur(function() {
+  //   validarcumpleanos();
+  // });
+
+  // $("#email").blur(function() {
+  //   validaremail();
+  // });
+
+});  
+
+
+   /////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////--------- functions ----------/////
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -171,5 +210,3 @@ $(document).ready(function() {
       }
     }    
   }
-
-});     

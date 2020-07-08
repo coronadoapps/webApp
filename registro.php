@@ -7,7 +7,7 @@
 	$contrasena = $_POST['contrasena'];
 	$cumpleanos = $_POST['cumpleanos'];
 	$email = $_POST['email'];
-	$fecha_registro = date("y/m/d");
+	$fecha_registro = now();
 
 	$query = "SELECT * FROM usuarios WHERE usuario = '$usuario' OR email = '$email'";
 	$result = mysqli_query($conex,$query);
